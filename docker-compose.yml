@@ -1,0 +1,15 @@
+services:
+  srv-dragenda:
+    image: bitnami/postgresql:17.5.0
+    container_name: dragenda
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=dragenda-db
+    ports:
+      - "5432:5432"
+    healthcheck:                          # Define um healthcheck para o Docker monitorar se o PostgreSQL está funcionando corretamente
+      test: ["CMD-SHELL", "pg_isready -U docker"]  # Comando que será executado para verificar se o banco está pronto para aceitar conexões
+      interval: 10s                        # Intervalo de tempo entre cada tentativa de healthcheck (a cada 10 segundos)
+      timeout: 5s                          # Tempo máximo que o healthcheck pode levar antes de considerar a tentativa como falha (5 segundos)
+      retries: 5                           # Quantidade de tentativas consecutivas que podem falhar antes do container ser considerado "unhealthy"
