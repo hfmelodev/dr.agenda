@@ -61,6 +61,11 @@ export function SignUpForm() {
         onSuccess: () => {
           router.push('/dashboard')
         },
+        onError: () => {
+          form.setError('email', {
+            message: 'Esse e-mail já possui cadastro',
+          })
+        },
       }
     )
   }
