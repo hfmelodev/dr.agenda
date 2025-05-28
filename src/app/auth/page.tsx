@@ -1,5 +1,3 @@
-'use client'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { LogIn, UserPlus } from 'lucide-react'
 import Image from 'next/image'
