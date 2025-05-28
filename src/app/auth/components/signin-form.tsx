@@ -20,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, LogIn } from 'lucide-react'
+import { Globe, Loader2, LogIn } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -73,6 +73,13 @@ export function SignInForm() {
     )
   }
 
+  async function handleLoginWithGoogle() {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+    })
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -118,23 +125,35 @@ export function SignInForm() {
           </CardContent>
 
           <CardFooter>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Validando informações...
-                </>
-              ) : (
-                <>
-                  <LogIn className="size-4" />
-                  Entrar
-                </>
-              )}
-            </Button>
+            <div className="flex w-full flex-col gap-2">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Validando informações...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="size-4" />
+                    Entrar
+                  </>
+                )}
+              </Button>
+
+              <Button
+                type="button"
+                onClick={handleLoginWithGoogle}
+                variant="outline"
+                className="w-full"
+              >
+                <Globe className="size-4" />
+                Google
+              </Button>
+            </div>
           </CardFooter>
         </form>
       </Form>
