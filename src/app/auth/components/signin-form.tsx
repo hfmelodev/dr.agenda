@@ -18,9 +18,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LogIn } from 'lucide-react'
+import { Loader2, LogIn } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const signInFormSchema = z.object({
@@ -35,6 +38,8 @@ const signInFormSchema = z.object({
 type SignInFormType = z.infer<typeof signInFormSchema>
 
 export function SignInForm() {
+  const router = useRouter()
+
   const form = useForm<SignInFormType>({
     shouldUnregister: true,
     resolver: zodResolver(signInFormSchema),
@@ -44,8 +49,28 @@ export function SignInForm() {
     },
   })
 
-  function handleSignInForm(data: SignInFormType) {
-    console.log(data)
+  async function handleSignInForm(data: SignInFormType) {
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          router.push('/dashboard')
+
+          toast.success('Login realizado com sucesso')
+        },
+        onError: () => {
+          form.setError('email', {
+            message: 'E-mail ou senha incorretos',
+          })
+          form.setError('password', {
+            message: 'E-mail ou senha incorretos',
+          })
+        },
+      }
+    )
   }
 
   return (
@@ -93,9 +118,22 @@ export function SignInForm() {
           </CardContent>
 
           <CardFooter>
-            <Button className="w-full">
-              <LogIn className="size-4" />
-              Entrar
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Validando informações...
+                </>
+              ) : (
+                <>
+                  <LogIn className="size-4" />
+                  Entrar
+                </>
+              )}
             </Button>
           </CardFooter>
         </form>

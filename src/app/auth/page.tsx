@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 import Logo from '@/assets/logo.svg'
 import { SignInForm } from './components/signin-form'
-import { SignUpForm } from './components/singup-form'
+import { SignUpForm } from './components/signup-form'
 
 export default function AuthPage() {
   return (

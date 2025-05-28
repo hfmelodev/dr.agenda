@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'dr.agenda',
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="dark antialiased">{children}</body>
+      <body className="dark antialiased">
+        {children}
+        <Toaster richColors theme="dark" position="top-center" />
+      </body>
     </html>
   )
 }
