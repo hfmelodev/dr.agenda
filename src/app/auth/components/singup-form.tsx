@@ -18,8 +18,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Save } from 'lucide-react'
+import { Loader2, Save } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -36,6 +38,8 @@ const signUpFormSchema = z.object({
 type SignUpFormType = z.infer<typeof signUpFormSchema>
 
 export function SignUpForm() {
+  const router = useRouter()
+
   const form = useForm<SignUpFormType>({
     shouldUnregister: true,
     resolver: zodResolver(signUpFormSchema),
@@ -46,8 +50,19 @@ export function SignUpForm() {
     },
   })
 
-  function handleSignUpForm(data: SignUpFormType) {
-    console.log(data)
+  async function handleSignUpForm(data: SignUpFormType) {
+    await authClient.signUp.email(
+      {
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      },
+      {
+        onSuccess: () => {
+          router.push('/dashboard')
+        },
+      }
+    )
   }
 
   return (
@@ -110,9 +125,22 @@ export function SignUpForm() {
           </CardContent>
 
           <CardFooter>
-            <Button type="submit" className="w-full">
-              <Save className="size-4" />
-              Registrar
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Salvando informações...
+                </>
+              ) : (
+                <>
+                  <Save className="size-4" />
+                  Registrar
+                </>
+              )}
             </Button>
           </CardFooter>
         </form>

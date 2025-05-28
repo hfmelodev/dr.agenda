@@ -27,7 +27,7 @@ export const usersTable = pgTable('users', {
 })
 
 export const sessionsTable = pgTable('sessions', {
-  id: uuid('id').defaultRandom().primaryKey(),
+  id: text('id').primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),
   token: text('token').notNull().unique(),
   createdAt: timestamp('created_at').notNull(),
@@ -40,7 +40,7 @@ export const sessionsTable = pgTable('sessions', {
 })
 
 export const accountsTable = pgTable('accounts', {
-  id: uuid('id').defaultRandom().primaryKey(),
+  id: text('id').primaryKey(),
   accountId: text('account_id').notNull(),
   providerId: text('provider_id').notNull(),
   userId: text('user_id')
@@ -58,7 +58,7 @@ export const accountsTable = pgTable('accounts', {
 })
 
 export const verificationsTable = pgTable('verifications', {
-  id: uuid('id').defaultRandom().primaryKey(),
+  id: text('id').primaryKey(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
   expiresAt: timestamp('expires_at').notNull(),
