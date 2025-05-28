@@ -3,10 +3,21 @@ import { LogIn, UserPlus } from 'lucide-react'
 import Image from 'next/image'
 
 import Logo from '@/assets/logo.svg'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { SignInForm } from './components/signin-form'
 import { SignUpForm } from './components/signup-form'
 
-export default function AuthPage() {
+export default async function AuthPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (session?.user) {
+    redirect('/dashboard')
+  }
+
   return (
     <main className="grid min-h-screen grid-cols-1 md:grid-cols-2">
       <div className="hidden h-full flex-col justify-between border-foreground/5 border-r bg-muted p-10 text-muted-foreground md:flex">

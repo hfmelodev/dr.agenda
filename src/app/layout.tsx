@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="dark antialiased">
         {children}
-        <Toaster richColors theme="dark" position="top-center" />
+        <Toaster richColors theme="dark" position="bottom-center" />
       </body>
     </html>
   )
